@@ -36,11 +36,13 @@ from fuzz_curl import inject_fuzz
 
 try:
     from pyjfuzz.lib import PJFConfiguration
-    from pyjfuzz.lib import PJFFactory
+    # from pyjfuzz.lib import PJFFactory
 except ImportError:
     print "[!] Can't find PyJFuzz API library, please install with: 'git clone https://github.com/mseclab/PyJFuzz.git'"
     print "[!] One done install with: 'sudo python setup.py install'"
     exit(-1)
+
+from rewrite_lib.PyjModifiedLib import PJFFactoryPoint as PJFFactory
 from argparse import Namespace
 from StringIO import StringIO
 from threading import Thread
@@ -371,6 +373,7 @@ def fuzzer_process(ip, port, data, secure=False, max_threads=10,
             while not fuzzer_queue.empty():
                 #  get the element to fuzz
                 fuzzed = fuzzer_queue.get()
+                print("fuzzed: {0}".format(fuzzed))
                 result = [None, 0, 0, None]
                 #  perform the request until we got a result
                 while result[1] == 0:
@@ -438,6 +441,8 @@ def fuzzer_process(ip, port, data, secure=False, max_threads=10,
     while True:
         try:
             #  send the fuzzed input to the global thread queue
+            # f = factory.fuzzed
+            # print("##### putting... "+f)
             fuzzer_queue.put(factory.fuzzed)
             #  sleep to prevent high cpu usage
             time.sleep(0.1)

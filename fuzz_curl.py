@@ -77,8 +77,8 @@ def inject_fuzz(url_link):
 
     # get metadata
     host, port, conf_data = uncurl_url_link(url_link)
-    process_number = 5
-    threads_per_process = 10
+    process_number = 1
+    threads_per_process = 1
     is_strong_fuzz = True
     secure = False
 
